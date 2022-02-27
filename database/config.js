@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const dbconection= async()=>{
 
   // Usuario BBDD  Benjamin OsRi5cLgRrw6JcI4
-
+ 
   try{
 
     await mongoose.connect(process.env.DB_CNN);

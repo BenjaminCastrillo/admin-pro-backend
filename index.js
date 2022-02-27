@@ -11,18 +11,14 @@ dbconection();
 // CORS
 app.use(cors());
 
+// lectura y parseo del Body
+app.use(express.json());
+
 // rutas
 
+app.use('/api/usuarios',require('./routes/usuarios'))
+app.use('/api/login',require('./routes/auth'))
 
-app.get('/',(req,res)=>{
-
-
-  res.json({
-    ok:true,
-    msg:'hola mundo'
-  })
-
-})
 
 app.listen(process.env.PORT,()=>{
   
