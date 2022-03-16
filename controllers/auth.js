@@ -3,6 +3,7 @@ const  { response } =require('express');
 const Usuario  =require('../models/usuario');
 const bcrypt=require('bcryptjs');
 const {generarJWT}=require('../helpers/jwt');
+const {googleVerify}=require('../helpers/google-verify');
 
 const login=async(req,res=response)=>{
 
@@ -53,6 +54,50 @@ const login=async(req,res=response)=>{
   }
 
 };
+const googleSignIn=async(req,res=response)=>{
+
+  const googleToken=req.body.token;
+
+  try{
+
+    console.log(googleToken);
+    const {name,email,picture}= await googleVerify(googleToken);
+    let usuario;
+    const usuarioDB= await Usuario.findOne({email});
+    
+    if (!usuarioDB){
+      usuario= new Usuario({
+        nombre:name,
+        email,
+        password:'@@@',
+        img:picture,
+        google:true
+      });
+    }else{
+      usuario=usuarioDB;
+      usuario.google=true;
+    }
+
+    await usuario.save();
+    const token= await generarJWT(usuario.id);
+
+    res.json({
+      ok:true,
+      msg:token
+    });
+  }catch (error) {
+    res.status(401).json({
+      ok:false,
+      msg:"token erroneo",
+      googleToken
+    });
+
+  }
+
+
+};
+
 module.exports={
-  login
+  login,
+  googleSignIn
 };

@@ -8,6 +8,11 @@ const  app=express();
 
 // BBDD
 dbconection();
+
+// Directorio público
+
+app.use(express.static('public'));
+
 // CORS
 app.use(cors());
 
