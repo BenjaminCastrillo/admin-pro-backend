@@ -16,8 +16,9 @@ router.post('/',
 ],crearMedico);
 
 router.put('/:id',
-    validarJWT,
-    [
+    [validarJWT,
+    check('nombre','El nombre del medico es obligatorio').not().isEmpty(),
+    check('hospital','El codigo del hospital tiene que ser válido').isMongoId(),
     ],
     actualizarMedico);
 

@@ -1,6 +1,7 @@
 const {response}=require("express");
 const bcrypt=require("bcryptjs");
 const Medico=require("../models/medico");
+const Hospital=require("../models/hospital");
 const { generarJWT }=require('../helpers/jwt');
 
 
@@ -46,12 +47,43 @@ const crearMedico=async(req,res=response)=>{
   
 };
 const actualizarMedico=async(req,res=response)=>{
-  const uid=req.params.id;
+
+  const id=req.params.id;
+  const uid=req.uid;
+  const hospitalId=req.body.hospital;
  
   try{
+
+    const medico= await Medico.findById(id);
+
+    if (!medico){
+      return res.status(404).json({
+        ok:false,
+        msg:"Medico no encontrado"
+      });
+
+    }
+    const hospital= await Hospital.findById(hospitalId);
+
+    if (!hospital){
+      return res.status(404).json({
+        ok:false,
+        msg:"Hospital no encontrado"
+      });
+
+    }
+
+    const cambioMedico={
+      ...req.body,
+      usuario:uid
+    };
+  
+    const medicoDB=await Medico.findByIdAndUpdate(id,cambioMedico, {new:true});
+
+    
     res.json({
       ok:true,
-      msg:"actualizarMedico"
+      medicoDB
     });
 
   }
@@ -67,12 +99,28 @@ const actualizarMedico=async(req,res=response)=>{
 
 const borrarMedico=async(req,res=response)=>{
 
+  const id=req.params.id;
+ 
   try{
+
+    const medico= await Medico.findById(id);
+
+    if (!medico){
+      return res.status(404).json({
+        ok:false,
+        msg:"Medico no encontrado"
+      });
+
+    }
+  
+    const medicoDB=await Medico.findByIdAndDelete(id);
+
+    
     res.json({
       ok:true,
-      msg:"borrarMedico"
+      msg:"Medico eliminado"
     });
-  
+
   }
   catch(error){
     console.log(error);

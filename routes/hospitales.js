@@ -17,7 +17,8 @@ validarCampos
 
 router.put('/:id',   
     [validarJWT,
-    
+    check('nombre','El nombre del hospital es obligatorio').not().isEmpty(),
+    validarCampos
     ],
     actualizarHospital);
 

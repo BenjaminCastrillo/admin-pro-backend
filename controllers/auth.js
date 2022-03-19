@@ -15,7 +15,6 @@ const login=async(req,res=response)=>{
     // Verificar email
     const usuarioDB = await Usuario.findOne({email});
     
-    console.log(usuarioDB);
     if (!usuarioDB){
 
      return res.status(404).json({
@@ -36,8 +35,6 @@ const login=async(req,res=response)=>{
     // generar el token
 
     const token= await generarJWT(usuarioDB.id);
-  
-
     res.json({
       ok:true,
       msg:token
@@ -93,11 +90,24 @@ const googleSignIn=async(req,res=response)=>{
     });
 
   }
-
-
 };
 
+const renewToken=async(req,res=response)=>{
+
+  const uid=req.uid;
+
+  console.log(uid);
+
+  const token= await generarJWT(uid);
+
+  res.json({
+    ok:true,
+    uid,
+    token
+  });
+};
 module.exports={
   login,
-  googleSignIn
+  googleSignIn,
+  renewToken
 };
