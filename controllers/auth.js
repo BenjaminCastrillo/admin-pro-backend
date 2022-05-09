@@ -4,9 +4,9 @@ const Usuario  =require('../models/usuario');
 const bcrypt=require('bcryptjs');
 const {generarJWT}=require('../helpers/jwt');
 const {googleVerify}=require('../helpers/google-verify');
+const {ObjectId} = require('mongodb');
 
 const login=async(req,res=response)=>{
-
 
   const {email,password}=req.body;
 
@@ -37,7 +37,7 @@ const login=async(req,res=response)=>{
     const token= await generarJWT(usuarioDB.id);
     res.json({
       ok:true,
-      msg:token
+      token:token
     });
   }
   catch(error){
@@ -80,7 +80,7 @@ const googleSignIn=async(req,res=response)=>{
 
     res.json({
       ok:true,
-      msg:token
+      token:token
     });
   }catch (error) {
     res.status(401).json({
@@ -94,17 +94,35 @@ const googleSignIn=async(req,res=response)=>{
 
 const renewToken=async(req,res=response)=>{
 
-  const uid=req.uid;
-
-  console.log(uid);
+  const uid=(req.uid);
 
   const token= await generarJWT(uid);
 
-  res.json({
-    ok:true,
-    uid,
-    token
-  });
+  console.log('RENOVANDO TOKEN')
+
+  try{
+    const usuario= await  Usuario.findById({_id:ObjectId(uid)});
+
+    if (!usuario){
+      return res.status(404).json({
+        ok:false,
+        msg:'Error, usuario no encontrado' 
+      });
+    }
+
+    res.json({
+      ok:true,
+      token,
+      usuario
+    });
+  } catch(error){
+    console.log(error);
+    res.status(500).json({
+        ok:false,
+        msg:'Error interno Contacte con el administrador'
+    });
+  }
+  return
 };
 module.exports={
   login,

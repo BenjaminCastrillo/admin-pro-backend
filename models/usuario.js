@@ -34,8 +34,8 @@ UsuarioSchema.method('toJSON',function(){
   // modifica el schema extrayendo los campos indicados 
   // y modificando el nombre del campo id
 
-  object.uid=_id
+  object.uid=_id;
   return object;
 })
 
-module.exports=model('Usuario',UsuarioSchema)
+module.exports=model('Usuario',UsuarioSchema);

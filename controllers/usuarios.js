@@ -100,7 +100,16 @@ const actualizarUsuario=async(req,res=response)=>{
       }
     }
 
-    campos.email=email;
+    if(!usuarioDb.google){
+      
+      campos.email=email;
+    }else if(usuarioDb.email!==email){
+      res.status(400).json({
+        ok:false,
+        msg:"Usuarios de Google no pueden cambiar su correo"
+      });
+      return;
+    }
     const usuarioActualizado=await Usuario.findByIdAndUpdate(uid,campos,{new:true});
 
     res.json({
@@ -114,7 +123,7 @@ const actualizarUsuario=async(req,res=response)=>{
     res.status(500).json({
       ok:false,
       msg:"Error inexperado"
-    })
+    });
   }
 
 }

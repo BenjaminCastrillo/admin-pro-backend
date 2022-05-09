@@ -26,7 +26,7 @@ const fileUpload=async (req,res)=>{
   }
 
   // procesar imagen
-  const imagen = req.files.image;  // el files viene del midleware expressFileUpload que ejecutamos en la ruta
+  const imagen = req.files.imagen;  // el files viene del midleware expressFileUpload que ejecutamos en la ruta
 
   console.log(imagen);
   const nombreCortado= imagen.name.split('.');
@@ -78,11 +78,13 @@ const fileUpload=async (req,res)=>{
 
 // imagen por defecto
 
+
     if (fs.existsSync(pathImg))
     {
       res.sendFile(pathImg);
     }else{
-      res.sendFile(path.join (__dirname,'../uploads/no-img.jpg'));
+      
+      res.sendFile(path.join (__dirname,'../uploads/no-user2.jpeg'));
 
     }
 
