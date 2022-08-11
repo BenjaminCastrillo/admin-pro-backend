@@ -10,7 +10,7 @@ const borrarImagen=(path)=>{
   }
 
   return;
-}
+};
 
 const actualizarImagen= async (tipo,id,nombreArchivo)=>{
 

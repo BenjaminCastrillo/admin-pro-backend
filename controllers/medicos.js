@@ -19,6 +19,28 @@ const getMedicos=async (req,res)=>{
 
 
 };
+const getMedicoById=async (req,res)=>{
+  const id=req.params.id;
+
+  try{
+    const medico= await Medico.findById(id)
+    .populate('usuario','nombre')
+    .populate('hospital','nombre');
+
+    res.json({
+      ok:true,
+    medico:medico
+    });
+  }
+  catch(error){
+    console.log(error);
+    res.status(500).json({
+      ok:false,
+      msg:"Error inexperado"
+    });
+  }
+
+};
 
 const crearMedico=async(req,res=response)=>{
   const uid=req.uid;
@@ -136,6 +158,7 @@ module.exports={
   getMedicos,
   crearMedico,
   actualizarMedico,
-  borrarMedico
+  borrarMedico,
+  getMedicoById
 
 };

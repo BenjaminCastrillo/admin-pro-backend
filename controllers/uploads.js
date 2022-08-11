@@ -40,7 +40,7 @@ const fileUpload=async (req,res)=>{
       ok:false,
       msg:'La extension del archivo es incorrecta'
     });
-  }
+  } 
 
   // Generar el nombre de la imagen
   const nombreArchivo=`${uuidv4()}.${extension}`;
